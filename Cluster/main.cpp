@@ -6,6 +6,7 @@
 #define _CRT_SECURE_NO_WARNING
 
 // 함수 처리와 calloc을 malloc 으로 수정, 중심정 배열 복사 해결하기
+// 추가 실험
 
 typedef struct point {
     double x;
