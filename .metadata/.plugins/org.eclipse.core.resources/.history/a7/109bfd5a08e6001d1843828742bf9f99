@@ -1,0 +1,178 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Scanner;
+
+public class HW1 {
+	public static void normal(List[] user) {
+		ListIterator<Contents> litr;
+		Contents ss;
+		for (int i = 0; i < user.length; i++) {
+			double average = 0;
+			litr = user[i].listIterator();
+			while (litr.hasNext()) {
+				ss = litr.next();
+				average += ss.score;
+			}
+			average /= user[i].size();
+
+			while (litr.hasPrevious()) {
+				ss = litr.previous();
+				ss.score -= average;
+				litr.set(ss);
+			}
+		}
+	}
+
+	public static void prtNormal(List[] user, int target) {
+		ListIterator<Contents> litr;
+		litr = user[target].listIterator();
+		Contents ss;
+		System.out.print("1. 사용자 " + target + "의 콘텐츠와 정규화 점수:\n   ");
+		System.out.print("[");
+		while (litr.hasNext()) {
+			ss = litr.next();
+			System.out.printf("(%s, %.3f)", ss.content, ss.score);
+			if (litr.hasNext()) {
+				System.out.print(", ");
+			}
+		}
+		System.out.println("]");
+	}
+
+	public static void similarity(List[] user, int target, ArrayList<Contents> arr) {
+		AlphaSort al = new AlphaSort();
+		ScoreSort sc = new ScoreSort();
+		Contents s1, s2;
+		ListIterator<Contents> itr1, itr2;
+
+		double sumTarget, sumOther, multi, value;
+		int i = 0, cmp;
+
+		while (i < user.length) {
+			if (target == i || user[i].size() == 0)
+				i++;
+
+			itr1 = user[target].listIterator();
+			itr2 = user[i++].listIterator();
+			multi = 0;
+			value = 0;
+			sumTarget = 0;
+			sumOther = 0;
+
+			while (itr1.hasNext()) {
+				s1 = itr1.next();
+				sumTarget += (s1.score * s1.score);
+				
+				while (itr2.hasNext()) {
+
+					s2 = itr2.next();
+					sumOther += (s2.score * s2.score);
+					multi = (s1.score * s2.score);
+					System.out.println("tar : " + s1.content + " / " + sumTarget + " user " + s2.content + " / "
+							+ sumOther + "\n multi " + multi + " value " + value);
+					cmp = al.compare(s1, s2);
+
+					if (!itr1.hasNext()) {
+						continue;
+					}
+
+					if (cmp == 0) {
+						value += multi;
+						break;
+					} else if (cmp < 0) {
+						itr2.previous();
+						break;
+					}
+				}
+			}
+			System.out.println("-----------------------------------------");
+			value /= (Math.sqrt(sumOther) + Math.sqrt(sumTarget));
+			arr.add(new Contents(String.valueOf(i), value));
+		}
+		Collections.sort(arr, sc.reversed());
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		System.out.print("파일 이름, target 사용자, 참고인 수, 항목 수? ");
+		Scanner in = new Scanner(System.in);
+		String fileName = in.next();
+		String line;
+		AlphaSort al = new AlphaSort();
+		int target = in.nextInt();
+		int n = in.nextInt();
+		int k = in.nextInt();
+
+		in.close();
+
+		FileReader fileReader = null;
+		try {
+			fileReader = new FileReader(fileName);
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+		int num = Integer.parseInt(bufferedReader.readLine());
+		List user[] = new List[num];
+
+		for (int i = 0; i < num; i++)
+			user[i] = new LinkedList<Contents>();
+
+		while ((line = bufferedReader.readLine()) != null) {
+			String token[] = line.split(" ");
+			user[Integer.parseInt(token[0])].add(new Contents(token[1], Double.parseDouble(token[2])));
+		}
+		for (int i = 0; i < num; i++)
+			Collections.sort(user[i], al);
+
+		normal(user);
+		prtNormal(user, target);
+		System.out.println("2. ~~:");
+		ArrayList<Contents> arr = new ArrayList<>();
+		similarity(user, target, arr);
+		System.out.println(arr.get(n));
+	}
+}
+
+class AlphaSort implements Comparator<Contents> {
+	public int compare(Contents a, Contents b) {
+		String eng1 = a.content.substring(0, 1);
+		String eng2 = b.content.substring(0, 1);
+
+		int cmp = eng1.compareTo(eng2);
+		if (cmp == 0) {
+			int num1 = Integer.parseInt(a.content.substring(1));
+			int num2 = Integer.parseInt(b.content.substring(1));
+
+			cmp = Integer.compare(num1, num2);
+		}
+
+		return cmp;
+	}
+}
+
+class ScoreSort implements Comparator<Contents> {
+	public int compare(Contents a, Contents b) {
+		return Double.compare(a.score, b.score);
+	}
+}
+
+class Contents {
+	String content;
+	double score;
+
+	Contents(String content, double score) {
+		this.content = content;
+		this.score = score;
+	}
+}

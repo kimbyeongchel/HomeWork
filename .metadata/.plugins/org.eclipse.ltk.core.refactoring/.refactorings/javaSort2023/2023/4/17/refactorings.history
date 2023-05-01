@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;JavaFramework.IteratorDemo&apos; to &apos;ArrayListToArray&apos;&#x0D;&#x0A;- Original project: &apos;javaSort2023&apos;&#x0D;&#x0A;- Original element: &apos;JavaFramework.IteratorDemo&apos;&#x0D;&#x0A;- Renamed element: &apos;JavaFramework.ArrayListToArray&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;IteratorDemo&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;JavaFramework{IteratorDemo.java[IteratorDemo" matchStrategy="1" name="ArrayListToArray" qualified="false" references="true" similarDeclarations="false" stamp="1682267562815" textual="false" version="1.0"/>
+</session>

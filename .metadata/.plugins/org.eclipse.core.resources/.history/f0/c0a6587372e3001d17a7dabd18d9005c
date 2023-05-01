@@ -1,0 +1,12 @@
+import java.util.Scanner;
+
+public class HW1 {
+	public static void main(String[] args) {
+		System.out.print("파일 이름, target 사용자, 참고인 수, 항목 수? ");
+		Scanner in = new Scanner(System.in);
+		in.nextInt();
+		in.nextInt();
+		in.nextInt();
+	}
+
+}

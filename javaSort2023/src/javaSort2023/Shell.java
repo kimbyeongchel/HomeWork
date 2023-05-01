@@ -1,0 +1,27 @@
+package javaSort2023;
+
+public class Shell extends Abstract {
+	public static void sort(Comparable a[]) {
+		int N = a.length;
+		int h = 1;
+
+		while (h < N)
+			h = h * 3 + 1;
+		System.out.println(h);
+
+		while (h >= 1) {
+			for (int i = h; i < N; i++) {
+				for (int j = i; j >= h && less(a[j], a[j - h]); j -= h) {
+					exch(a, j, j - h);
+				}
+			}
+			h /= 3;
+		}
+	}
+
+	public static void main(String[] args) {
+		Integer a[] = { 10, 4, 5, 2, 1, 8, 3, 6, 11, 7, 20, 19, 17, 16, 5, 4 };
+		sort(a);
+		Show(a);
+	}
+}
