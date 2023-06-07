@@ -145,7 +145,7 @@ public class HW3 {
 
 	private static char findLFURemovePage(String refString, HashMap<Character, Integer> pageTable, int currentIndex) {
 		char pageToRemove = ' ';
-		int smallRef = refString.length();
+		int smallFre = refString.length();
 		HashMap<Character, Integer> frequency = new HashMap<>();
 		List<Character> pagesToRemove = new ArrayList<>();
 
@@ -159,14 +159,14 @@ public class HW3 {
 
 			frequency.put(page, count);
 
-			if (smallRef > count) {
-				smallRef = count;
+			if (smallFre > count) {
+				smallFre = count;
 				pageToRemove = page;
 			}
 		}
 
 		for (Map.Entry<Character, Integer> small : frequency.entrySet()) {
-			if (small.getValue() != smallRef)
+			if (small.getValue() != smallFre)
 				pagesToRemove.add(small.getKey());
 		}
 
